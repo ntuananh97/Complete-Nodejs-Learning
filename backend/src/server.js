@@ -3,6 +3,7 @@ const express = require('express');
 const webRouter = require('./routes/web');
 const configViewEngine = require('./config/viewEngine');
 const connection = require('./config/database');
+const Kitten = require('./models/Kitten');
 
 const port = process.env.PORT || 5000;
 const app = express();
