@@ -1,6 +1,8 @@
 require('dotenv').config()
 const express = require('express');
 const webRouter = require('./routes/web');
+const apiRouter = require('./routes/api');
+
 const cors = require('cors');
 const configViewEngine = require('./config/viewEngine');
 const connection = require('./config/database');
@@ -20,6 +22,7 @@ configBodyParser(app)
 
 // Routes
 app.use('/', webRouter);
+app.use('/v1/api', apiRouter);
 
 const startApp = () => {
     app.listen(port, () => {
