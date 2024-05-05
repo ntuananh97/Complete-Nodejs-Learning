@@ -8,11 +8,16 @@ const configViewEngine = require('./config/viewEngine');
 const connection = require('./config/database');
 const configBodyParser = require('./config/bodyParser');
 
+const fileUpload = require('express-fileupload');
+
 const port = process.env.PORT || 5000;
 const app = express();
 
 // cors
 app.use(cors())
+
+// congfig fileUpload
+app.use(fileUpload());
 
 // config template
 configViewEngine(app)
