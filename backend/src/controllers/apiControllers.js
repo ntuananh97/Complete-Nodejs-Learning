@@ -25,7 +25,34 @@ const createUserApi = async (req, res) => {
     })
 }
 
+const updateUserApi = async (req, res) => {
+console.log("updateUserApi ~ updateUserApi:", )
+
+    const userId = req.params.id;
+    const requestBody = req.body
+    
+    const updatedUser = await User.updateOne({ _id: userId }, { ...requestBody });
+
+    return res.status(200).json({
+        data: updatedUser,
+        errorCode: 0
+    })
+} 
+
+
+const deleteUserApi = async (req, res) => {
+    const userId = req.params.id;
+    const deletedUser = await User.deleteOne({ _id: userId });
+    res.status(200).json({
+        data: deletedUser,
+        errorCode: 0
+    })
+}
+
+
 module.exports = {
     getUsersApi,
-    createUserApi
+    createUserApi,
+    updateUserApi,
+    deleteUserApi
 }
