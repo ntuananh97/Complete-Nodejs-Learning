@@ -57,16 +57,29 @@ const uploadSingleFileApi = async (req, res) => {
 
   const uploadedFile = req.files.image;
   const hasMultipleFile = Array.isArray(uploadedFile);
-  console.log("req.files", req.files);
 
-  const result = hasMultipleFile
-    ? await uploadMultipleFilesService(uploadedFile)
-    : await uploadSingleFileService(uploadedFile);
-  console.log("uploadSingleFileApi ~ result:", result);
+  if (hasMultipleFile) return res.status(400).send("Exceed file limit.");
+
+  const result = await uploadSingleFileService(uploadedFile);
 
   if (result.status === "failed") return res.status(500).send(result.error);
 
-  return res.send("Upload successfully!");
+  return res.send(result);
+}
+
+const uploadMultipleFilesApi = async (req, res) => {
+    if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).send("No files were uploaded.");
+    }
+
+    const uploadedFile = req.files.image;
+    const hasMultipleFile = Array.isArray(uploadedFile);
+
+    if (hasMultipleFile) {
+       const result = await uploadMultipleFilesService(uploadedFile);
+       return res.json(result)
+    }
+    return await uploadSingleFileApi(req, res)
 }
 
 
@@ -76,4 +89,5 @@ module.exports = {
     updateUserApi,
     deleteUserApi,
     uploadSingleFileApi,
+    uploadMultipleFilesApi
 }

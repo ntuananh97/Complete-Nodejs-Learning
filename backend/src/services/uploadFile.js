@@ -1,32 +1,56 @@
-const express = require("express");
+const path = require("path");
 
 const handleResponse = (status, path, error) => ({
     status, path, error
 })
 
+const getFileInfo = (uploadFileName = "") => {
+  const uploadPath = path.resolve(__dirname, '../public/upload')
+  const fileExtension = path.extname(uploadFileName);
+  const basename = path.basename(uploadFileName, fileExtension);
+
+  const finalName = `${basename}-${Date.now()}${fileExtension}`;
+  const finalPath = `${uploadPath}/${finalName}`
+
+  return {
+    finalName,
+    finalPath
+  }
+}
+
 const uploadSingleFileService = async (uploadFile) => {
-  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-  //   const uploadPath = express.static(path.join('./src', 'public', 'images'));
-  const uploadPath = __dirname + uploadFile.name;
+  const {finalName, finalPath} = getFileInfo(uploadFile.name);
 
   // Use the mv() method to place the file somewhere on your server
   try {
-    await uploadFile.mv(uploadPath);
-    return handleResponse("success", ["link-image"], null);
+    await uploadFile.mv(finalPath);
+    return handleResponse("success", finalName, null);
   } catch(err) {
-    return handleResponse("failed", [], err);
+    return handleResponse("failed", null, err);
   }
 };
 
 const uploadMultipleFilesService = async (uploadedFiles = []) => {
+  const finalResults = [];
+  let successCount = 0;
+
+  const uploadFileLength = uploadedFiles.length
+
+  for (let i = 0; i < uploadFileLength; i++) {
+    const fileObject = uploadedFiles[i]
+    const {finalName, finalPath} = getFileInfo(fileObject.name);
+
     try {
-        const results = await Promise.all(uploadedFiles.map(file => uploadSingleFileService(file)))
-        return handleResponse("success", results.map(res => res.path).flat(1), null);
+      await fileObject.mv(finalPath);
+      successCount ++;
+      finalResults.push(handleResponse("success", finalName, null));
+
+    } catch(err) {
+      finalResults.push(handleResponse("failed", null, err));
     }
-    catch (error) {
-        return handleResponse("failed", [], err);
-    }
-    
+  }
+
+  return finalResults
 }
 
 module.exports = {
