@@ -18,6 +18,14 @@ const getFileInfo = (uploadFileName = "") => {
   }
 }
 
+
+/**
+ * @return {{
+ * status: 'success' | 'failed',
+ * path: string,
+ * error: Object
+ * }}
+ */
 const uploadSingleFileService = async (uploadFile) => {
   const {finalName, finalPath} = getFileInfo(uploadFile.name);
 
