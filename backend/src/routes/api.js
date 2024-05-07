@@ -7,7 +7,7 @@ const {
   uploadSingleFileApi,
   uploadMultipleFilesApi,
 } = require("../controllers/apiControllers");
-const { createCustomerApi } = require('../controllers/customerControllers');
+const { createCustomerApi, bulkCustomersApi } = require('../controllers/customerControllers');
 
 const router = express.Router()
 
@@ -20,5 +20,6 @@ router.post('/file', uploadSingleFileApi);
 router.post('/files', uploadMultipleFilesApi);
 
 router.post('/customers', createCustomerApi);
+router.post('/customers/bulk', bulkCustomersApi);
 
 module.exports = router
