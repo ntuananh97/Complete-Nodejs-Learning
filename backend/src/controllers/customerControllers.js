@@ -1,4 +1,4 @@
-const { createCustomerService, bulkCustomersService } = require("../services/customerServices");
+const { createCustomerService, bulkCustomersService, getCustomersService, updateCustomersService, deleteCustomersService } = require("../services/customerServices");
 const { uploadSingleFileService } = require("../services/uploadFile");
 
 const createCustomerApi = async (req, res) => {
@@ -42,7 +42,45 @@ const bulkCustomersApi = async (req, res) => {
     
 }
 
+const getCustomersApi = async (req, res) => {
+    const results = await getCustomersService()
+
+    return res.status(200).json({
+        data: results,
+        errorCode:results ? 0 : 1
+    })
+    
+}
+
+const updateCustomerApi = async (req, res) => {
+    const userId = req.params.id;
+    const updatingData = req.body;
+
+    const results = await updateCustomersService(userId, updatingData)
+
+    return res.status(200).json({
+        data: results,
+        errorCode:results ? 0 : 1
+    })
+    
+}
+
+const deleteCustomerApi = async (req, res) => {
+    const userId = req.params.id;
+
+    const results = await deleteCustomersService(userId)
+
+    return res.status(200).json({
+        data: results,
+        errorCode:results ? 0 : 1
+    })
+    
+}
+
 module.exports = {
   createCustomerApi,
-  bulkCustomersApi
+  bulkCustomersApi,
+  getCustomersApi,
+  updateCustomerApi,
+  deleteCustomerApi
 };
