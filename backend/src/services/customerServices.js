@@ -50,10 +50,21 @@ const deleteCustomersService = async (id) => {
     }
 }
 
+const bulkDeleteCustomersService = async (ids) => {
+    try {
+        const data =  await Customer.deleteMany({ _id: ids });
+        return data
+    } catch (error) {
+        console.log(">>>> Error when bulkDeleteCustomersService: ", error)
+        return null
+    }
+}
+
 module.exports = {
     createCustomerService,
     bulkCustomersService,
     getCustomersService,
     updateCustomersService,
-    deleteCustomersService
+    deleteCustomersService,
+    bulkDeleteCustomersService
 }

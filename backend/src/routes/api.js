@@ -7,7 +7,7 @@ const {
   uploadSingleFileApi,
   uploadMultipleFilesApi,
 } = require("../controllers/apiControllers");
-const { createCustomerApi, bulkCustomersApi, getCustomersApi, updateCustomerApi, deleteCustomerApi } = require('../controllers/customerControllers');
+const { createCustomerApi, bulkCustomersApi, getCustomersApi, updateCustomerApi, deleteCustomerApi, bulkDeleteCustomerApi } = require('../controllers/customerControllers');
 
 const router = express.Router()
 
@@ -22,6 +22,7 @@ router.post('/files', uploadMultipleFilesApi);
 router.get('/customers', getCustomersApi)
 router.post('/customers', createCustomerApi);
 router.post('/customers/bulk', bulkCustomersApi);
+router.post('/customers/delete-bulk', bulkDeleteCustomerApi);
 router.put('/customers/:id', updateCustomerApi);
 router.delete('/customers/:id', deleteCustomerApi);
 
