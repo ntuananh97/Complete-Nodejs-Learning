@@ -43,7 +43,8 @@ const bulkCustomersApi = async (req, res) => {
 }
 
 const getCustomersApi = async (req, res) => {
-    const results = await getCustomersService()
+    const { page, pageSize } = req.query
+    const results = await getCustomersService(page, pageSize)
 
     return res.status(200).json({
         data: results,

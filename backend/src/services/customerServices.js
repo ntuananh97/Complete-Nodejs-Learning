@@ -20,10 +20,15 @@ const bulkCustomersService = async (datas) => {
     }
 }
 
-const getCustomersService = async () => {
+const getCustomersService = async (page = 1, pageSize = 1) => {
+    const offset = (Number(page) - 1) * Number(pageSize)
     try {
-        const customers =  await Customer.find({})
-        return customers
+        const [customers, totalDocuments] = await Promise.all([Customer.find({}).skip(offset).limit(Number(pageSize)).exec(),  Customer.countDocuments({})])
+        console.log("getCustomersService ~ totalDocuments:", totalDocuments)
+        return {
+            list: customers,
+            count: totalDocuments
+        };
     } catch (error) {
         console.log(">>>> Error when getCustomersService: ", error)
         return null
